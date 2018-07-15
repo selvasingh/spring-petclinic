@@ -199,7 +199,53 @@
           </dependency>
         </dependencies>
       </plugin>
+
+    <plugin>
+        <groupId>com.microsoft.azure</groupId>
+        <artifactId>azure-webapp-maven-plugin</artifactId>
+        <version>1.2.0</version>
+        <configuration>
+
+            <!-- Web App information -->
+            <resourceGroup>${RESOURCE_GROUP}</resourceGroup>
+            <appName>${WEBAPP_NAME}</appName>
+            <!-- <region> and <pricingTier> are optional. They will be used when creating new App Service Plan -->
+            <region>${REGION}</region>
+            <pricingTier>S1</pricingTier>
+
+            <!-- Java Runtime Stack for Web App on Linux -->
+            <linuxRuntime>jre8</linuxRuntime>
+
+            <!-- This is to make sure the jar file can be released at the server side -->
+            <stopAppDuringDeployment>true</stopAppDuringDeployment>
+
+            <!-- FTP deployment -->
+            <deploymentType>ftp</deploymentType>
+            <!-- Resources to be deployed to your Web App -->
+            <resources>
+                <resource>
+                    <!-- Where your artifacts are stored -->
+                    <directory>${project.basedir}/target</directory>
+                    <!-- Relative path to /site/wwwroot/ -->
+                    <targetPath>/</targetPath>
+                    <includes>
+                        <include>app.jar</include>
+                    </includes>
+                </resource>
+            </resources>
+
+            <!-- Application Settings of your Web App -->
+            <appSettings>
+                <property>
+                    <name>JAVA_OPTS</name>
+                    <value>-Djava.security.egd=file:/dev/./urandom</value>
+                </property>
+            </appSettings>
+        </configuration>
+    </plugin>
+
     </plugins>
+      <finalName>app</finalName>
   </build>
   <reporting>
     <plugins>
